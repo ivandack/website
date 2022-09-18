@@ -81,7 +81,9 @@ If you import any file located outside of the `/mocks` folder, Babel will not co
 
 ### Compiling files from other folders
 
-By default, Mocks Server configures Babel to compile only files inside the `/mocks` folder, and this may be a problem if you are importing external files from your routes or collection files. In that case, you can use the `only` option to include another folders:
+By default, Mocks Server configures Babel to compile only files inside the `/mocks` folder, and this may be a problem if you are importing external files from your routes or collection files. In that case, you can use the `only` option to include another folders.
+
+For Babel version up to v6:
 
 ```js
 module.exports = {
@@ -90,8 +92,29 @@ module.exports = {
       enabled: true,
       // highlight-start
       options: {
-        only: (filePath) => {
+        only: (filePath) => {   // Babel v6: Can pass a single function.
           return filePath.includes("/mocks/") || filePath.includes("/my-folder-to-include/");
+        },
+      },
+      // highlight-end
+    },
+  },
+};
+```
+
+For Babel v7+:
+
+```js
+module.exports = {
+  files: {
+    babelRegister: {
+      enabled: true,
+      // highlight-start
+      options: {
+        only: [   // Babel v7+: only accepts an array, not a single function.
+          (filePath) => {
+            return filePath.includes("/mocks/") || filePath.includes("/my-folder-to-include/");
+          ]
         },
       },
       // highlight-end
